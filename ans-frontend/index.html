@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANS | Smart Notification Service</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        githubDark: '#0d1117',
+                        githubNav: '#161b22',
+                        githubBorder: '#30363d',
+                        githubCard: '#161b22',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ฟอนต์ขนาดเล็กตาม footer */
+        .footer-font, .sidebar-font {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-githubDark text-gray-200 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- 1. แถบบาร์ด้านบน (Top Navbar) -->
+    <header class="bg-githubNav border-b border-githubBorder h-14 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <!-- ปุ่มแฮมเบอร์เกอร์ -->
+            <button id="menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-1">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <!-- โลโก้ -->
+            <a href="#" class="text-white text-xl flex items-center space-x-2">
+               <img src="./assets/image/icon-profile-main-©-2026-git-industries-inc.png" alt="Logo" class="w-6 h-6 object-contain">
+                <span class="font-bold text-sm tracking-wide">ANS Service</span>
+            </a>
+        </div>
+
+        <!-- รูปโปรไฟล์มุมขวาบน -->
+        <div class="flex items-center space-x-3">
+            <div id="user-profile" class="relative">
+                <img id="avatar-img" src="./assets/image/icon-profile-No-found©-2026-git-industries-inc.png.png" alt="Profile" class="w-8 h-8 rounded-full border border-githubBorder cursor-pointer bg-gray-700 object-cover">
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. แถบข้างสไลด์ (Sidebar / Drawer Menu แบบ GitHub) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity"></div>
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-githubNav border-r border-githubBorder z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between p-3 overflow-y-auto">
+        <div>
+            <!-- ส่วนหัวของ Sidebar (โลโก้ GitHub และปุ่มปิด) -->
+            <div class="flex items-center justify-between pb-3 px-1 border-b border-githubBorder">
+                <div class="flex items-center space-x-2">
+                    <img src="./assets/image/icon-profile-main-©-2026-git-industries-inc.png" alt="Sidebar Logo" class="w-6 h-6 object-contain">
+                </div>
+                <button id="close-sidebar" class="text-gray-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            
+            <!-- รายการเมนูสไตล์ GitHub (ฟอนต์เล็ก ตัวหนาขึ้นเฉพาะตัวที่เลือก พร้อมไอคอนครบถ้วน) -->
+            <nav class="mt-2 space-y-0.5 sidebar-font">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
+                    <i class="fa-solid fa-chart-line w-4 text-center"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="https:#####.com" target="_blank" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
+                    <i class="fa-solid fa-server w-4 text-center"></i>
+                    <span>Server Status</span>
+                </a>
+                <a href="#" onclick="switchTab('notification')" id="nav-notification" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
+                    <i class="fa-solid fa-paper-plane w-4 text-center"></i>
+                    <span>Notifications & settings</span>
+                </a>
+
+                <!-- เส้นกั้นหมวดหมู่ที่ 1 -->
+                <div class="my-2 border-t border-githubBorder"></div>
+
+                <a href="#" onclick="switchTab('login'); return false;" id="nav-login" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
+                    <i class="fa-brands fa-discord w-4 text-center"></i>
+                    <span id="nav-login-text">Login with Discord</span>
+                </a>
+
+                <!-- เส้นกั้นหมวดหมู่ที่ 2 -->
+                <div class="my-2 border-t border-githubBorder"></div>
+
+                <a href="#" onclick="switchTab('about')" id="nav-about" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
+                    <i class="fa-solid fa-circle-info w-4 text-center"></i>
+                    <span>About</span>
+                </a>
+            </nav>
+        </div>
+        <div class="text-[10px] text-gray-500 text-center pt-4 pb-1">
+            ANS Service v1.0.0
+        </div>
+    </aside>
+
+    <!-- 3. ส่วนเนื้อหาตรงกลาง (Responsive Main Content) -->
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6 my-auto">
+        <div class="w-full max-w-xl bg-githubCard border border-githubBorder rounded-[5px] p-5 sm:p-8 shadow-xl">
+            
+            <!-- Tab: Dashboard -->
+            <div id="tab-dashboard" class="space-y-4">
+                <div id="dashboard-content" class="text-center py-8">
+                    <div>
+                        <img src="./assets/image/warning-icon.png" alt="WNLOGIN" class="w-9 h-9 object-contain">
+                    </div>
+                    <h1 class="text-2xl font-bold text-white">ANS | Smart Notification Service</h1>
+                    <p id="dashboard-status" class="text-gray-400 mt-3">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
+                </div>
+            </div>
+
+            <!-- Tab: Notification & Settings Form -->
+            <div id="tab-notification" class="space-y-4 hidden">
+                <!-- พื้นที่ว่าง -->
+            </div>
+
+            <!-- Tab: Login -->
+            <div id="tab-login" class="space-y-4 text-center hidden">
+                <div class="text-5xl">🎓</div>
+                <h2 class="text-2xl font-bold text-white">เข้าสู่ระบบ</h2>
+                <p id="login-status" class="text-gray-400">เข้าสู่ระบบด้วยบัญชี Discord ของคุณ</p>
+                <a id="discord-login"
+   href="/auth/discord" class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-[5px] transition">
+                    <i class="fa-brands fa-discord"></i>
+                    <span>เข้าสู่ระบบด้วย Discord</span>
+                </a>
+                <button id="logout-btn" type="button" class="hidden mx-auto bg-gray-700 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-[5px] transition">ออกจากระบบ</button>
+            </div>
+
+            <!-- Tab: About -->
+            <div id="tab-about" class="space-y-4 text-center hidden">
+                <!-- พื้นที่ว่างตามโจทย์ -->
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 4. ส่วนข้างล่าง Footer -->
+    <footer class="border-t border-githubBorder py-6 px-4 text-center footer-font text-gray-500 space-y-2">
+        <div class="flex justify-center space-x-4 flex-wrap">
+            <a href="#" class="hover:underline">Terms</a>
+            <a href="#" class="hover:underline">Privacy</a>
+            <a href="#" class="hover:underline">Security</a>
+            <a href="#" class="hover:underline">Status</a>
+            <a href="#" class="hover:underline">Docs</a>
+        </div>
+        <div class="flex items-center justify-center space-x-2 pt-2">
+            <img src="./assets/image/©-TUP.png" alt="Footer Logo" class="w-4 h-4 object-contain">
+            <span>© 2026 ANS. git industries. All Rights Reserved.</span>
+        </div>
+    </footer>
+
+    <!-- JavaScript ควบคุมระบบ -->
+    <script>
+        // Backend URL ของ Render — Cookie session เป็นของโดเมนนี้
+        const BACKEND_URL = '';
+
+        const menuBtn = document.getElementById('menu-btn');
+        const closeSidebar = document.getElementById('close-sidebar');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const loginStatus = document.getElementById('login-status');
+        const dashboardStatus = document.getElementById('dashboard-status');
+        const discordLogin = document.getElementById('discord-login');
+        const logoutBtn = document.getElementById('logout-btn');
+        const navLoginText = document.getElementById('nav-login-text');
+        const avatarImg = document.getElementById('avatar-img');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+
+        function closeSidebarMenu() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        function toggleSidebar() {
+            if (sidebar.classList.contains('-translate-x-full')) openSidebar();
+            else closeSidebarMenu();
+        }
+
+        menuBtn.addEventListener('click', toggleSidebar);
+        closeSidebar.addEventListener('click', closeSidebarMenu);
+        sidebarOverlay.addEventListener('click', closeSidebarMenu);
+
+        function switchTab(tabName) {
+            ['dashboard', 'notification', 'login', 'about'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.classList.add('hidden');
+
+                const navEl = document.getElementById('nav-' + t);
+                if (navEl) {
+                    navEl.classList.remove('bg-gray-800', 'text-white', 'font-semibold');
+                    navEl.classList.add('text-gray-300');
+                }
+            });
+
+            const targetTab = document.getElementById('tab-' + tabName);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            const targetNav = document.getElementById('nav-' + tabName);
+            if (targetNav) {
+                targetNav.classList.remove('text-gray-300');
+                targetNav.classList.add('bg-gray-800', 'text-white', 'font-semibold');
+            }
+
+            closeSidebarMenu();
+        }
+
+        function setLoggedOut() {
+            navLoginText.textContent = 'Login with Discord';
+            loginStatus.textContent = 'เข้าสู่ระบบด้วยบัญชี Discord ของคุณ';
+            discordLogin.classList.remove('hidden');
+            logoutBtn.classList.add('hidden');
+            dashboardStatus.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
+            avatarImg.src = './assets/image/icon-profile-No-found©-2026-git-industries-inc.png.png';
+        }
+
+        function setLoggedIn(user) {
+            const displayName = user.username || ('User_' + user.discord_id);
+            navLoginText.textContent = 'บัญชี Discord: ' + displayName;
+            loginStatus.textContent = 'เข้าสู่ระบบแล้ว: ' + displayName;
+            discordLogin.classList.add('hidden');
+            logoutBtn.classList.remove('hidden');
+            dashboardStatus.textContent = 'เข้าสู่ระบบแล้วในชื่อ ' + displayName;
+
+            if (user.discord_id) {
+                // Discord CDN ไม่ต้องใช้ token และใช้ ID เป็นตัวระบุ avatar ได้เมื่อมี avatar hash
+                // Backend ตอนนี้ส่งเฉพาะข้อมูลที่ปลอดภัย จึงคง fallback ไว้ก่อน
+            }
+        }
+
+        async function checkSession() {
+            try {
+                const response = await fetch(BACKEND_URL + '/api/me', {
+                    method: 'GET',
+                    credentials: 'include',
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) {
+                    setLoggedOut();
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.authenticated && result.user) setLoggedIn(result.user);
+                else setLoggedOut();
+            } catch (error) {
+                console.error('Session check failed:', error);
+                dashboardStatus.textContent = 'ไม่สามารถเชื่อมต่อ Backend เพื่อตรวจสอบ Session ได้';
+                setLoggedOut();
+            }
+        }
+
+        logoutBtn.addEventListener('click', async () => {
+            logoutBtn.disabled = true;
+            try {
+                await fetch('/auth/logout', {
+    method: 'POST',
+    credentials: 'include'
+});
+            } catch (error) {
+                console.error('Logout failed:', error);
+            } finally {
+                setLoggedOut();
+                logoutBtn.disabled = false;
+                switchTab('dashboard');
+            }
+        });
+
+        // หลัง OAuth callback Backend จะ redirect กลับมาพร้อม ?login=success
+        // ไม่เก็บ token ใน localStorage และไม่อ่าน token จาก URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('login') === 'success') {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        switchTab('dashboard');
+        checkSession();
+    </script>
+</body>
+</html>
