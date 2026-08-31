@@ -50,7 +50,7 @@
         <!-- รูปโปรไฟล์มุมขวาบน -->
         <div class="flex items-center space-x-3">
             <div id="user-profile" class="relative">
-                <img id="avatar-img" src="./assets/image/icon-profile-No-found©-2026-git-industries-inc.png.png" alt="Profile" class="w-8 h-8 rounded-full border border-githubBorder cursor-pointer bg-gray-700 object-cover">
+                <img id="avatar-img" src="./assets/image/icon-profile-No-found2.png" alt="Profile" class="w-8 h-8 rounded-full border border-githubBorder cursor-pointer bg-gray-700 object-cover">
             </div>
         </div>
     </header>
@@ -69,7 +69,7 @@
                 </button>
             </div>
             
-            <!-- รายการเมนูสไตล์ GitHub (ฟอนต์เล็ก ตัวหนาขึ้นเฉพาะตัวที่เลือก พร้อมไอคอนครบถ้วน) -->
+            <!-- รายการเมนูสไตล์ GitHub -->
             <nav class="mt-2 space-y-0.5 sidebar-font">
                 <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-2.5 py-1.5 rounded-[5px] hover:bg-gray-800/60 text-gray-300 hover:text-white transition">
                     <i class="fa-solid fa-chart-line w-4 text-center"></i>
@@ -102,7 +102,7 @@
             </nav>
         </div>
         <div class="text-[10px] text-gray-500 text-center pt-4 pb-1">
-            ANS Service v1.0.0
+            ANS Service v.0.0.1
         </div>
     </aside>
 
@@ -112,12 +112,13 @@
             
             <!-- Tab: Dashboard -->
             <div id="tab-dashboard" class="space-y-4">
-                <div id="dashboard-content" class="text-center py-8">
+                <!-- แก้ไขให้รูปภาพและเนื้อหาอยู่ตรงกลางสมบูรณ์ -->
+                <div id="dashboard-content" class="flex flex-col items-center justify-center text-center py-8 space-y-3">
                     <div>
                         <img src="./assets/image/warning-icon.png" alt="WNLOGIN" class="w-9 h-9 object-contain">
                     </div>
                     <h1 class="text-2xl font-bold text-white">ANS | Smart Notification Service</h1>
-                    <p id="dashboard-status" class="text-gray-400 mt-3">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
+                    <p id="dashboard-status" class="text-gray-400 mt-1">กำลังตรวจสอบสถานะการเข้าสู่ระบบ...</p>
                 </div>
             </div>
 
@@ -128,9 +129,12 @@
 
             <!-- Tab: Login -->
             <div id="tab-login" class="space-y-4 text-center hidden">
-                <div class="text-5xl">🎓</div>
+                <!-- เปลี่ยนจากไอคอนหมวกเป็นรูปโปรไฟล์ที่ซิงค์กับมุมขวาบน -->
+                <div class="flex justify-center">
+                    <img id="login-avatar-img" src="./assets/image/icon-profile-No-found2.png" alt="Login Profile" class="w-16 h-16 rounded-full border-2 border-githubBorder bg-gray-700 object-cover shadow-md">
+                </div>
                 <h2 class="text-2xl font-bold text-white">เข้าสู่ระบบ</h2>
-                <p id="login-status" class="text-gray-400">เข้าสู่ระบบด้วยบัญชี Discord ของคุณ</p>
+                <p id="login-status" class="text-gray-400">เข้าสู่ระบบด้วยบัญชี Discord</p>
                 <a id="discord-login"
    href="/auth/discord" class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-[5px] transition">
                     <i class="fa-brands fa-discord"></i>
@@ -157,15 +161,13 @@
             <a href="#" class="hover:underline">Docs</a>
         </div>
         <div class="flex items-center justify-center space-x-2 pt-2">
-            <img src="./assets/image/©-TUP.png" alt="Footer Logo" class="w-4 h-4 object-contain">
+            <img src="./assets/image/©-TUP.png" alt="Footer Logo" class="w-8 h-8 object-contain">
             <span>© 2026 ANS. git industries. All Rights Reserved.</span>
         </div>
     </footer>
 
     <!-- JavaScript ควบคุมระบบ -->
     <script>
-        // Backend URL ของ Render — Cookie session เป็นของโดเมนนี้
-        const BACKEND_URL = '';
 
         const menuBtn = document.getElementById('menu-btn');
         const closeSidebar = document.getElementById('close-sidebar');
@@ -177,6 +179,7 @@
         const logoutBtn = document.getElementById('logout-btn');
         const navLoginText = document.getElementById('nav-login-text');
         const avatarImg = document.getElementById('avatar-img');
+        const loginAvatarImg = document.getElementById('login-avatar-img'); // อ้างอิงรูปโปรไฟล์ในหน้า Login เพิ่มเติม
 
         function openSidebar() {
             sidebar.classList.remove('-translate-x-full');
@@ -227,7 +230,9 @@
             discordLogin.classList.remove('hidden');
             logoutBtn.classList.add('hidden');
             dashboardStatus.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
-            avatarImg.src = './assets/image/icon-profile-No-found©-2026-git-industries-inc.png.png';
+            const defaultImg = './assets/image/icon-profile-No-found2.png';
+            avatarImg.src = defaultImg;
+            if (loginAvatarImg) loginAvatarImg.src = defaultImg; // เปลี่ยนรูปล็อกอินกลับเป็นค่าเริ่มต้นด้วย
         }
 
         function setLoggedIn(user) {
@@ -238,15 +243,13 @@
             logoutBtn.classList.remove('hidden');
             dashboardStatus.textContent = 'เข้าสู่ระบบแล้วในชื่อ ' + displayName;
 
-            if (user.discord_id) {
-                // Discord CDN ไม่ต้องใช้ token และใช้ ID เป็นตัวระบุ avatar ได้เมื่อมี avatar hash
-                // Backend ตอนนี้ส่งเฉพาะข้อมูลที่ปลอดภัย จึงคง fallback ไว้ก่อน
-            }
+            // หากมีรูปโปรไฟล์ดิสคอร์ดหรืออวตาร สามารถอัปเดต URL ของรูปได้ตรงนี้ (ถ้ามีการส่งค่า avatar มาจาก backend)
+            // ตัวอย่างเช่น: if (user.avatar_url) { avatarImg.src = user.avatar_url; loginAvatarImg.src = user.avatar_url; }
         }
 
         async function checkSession() {
             try {
-                const response = await fetch(BACKEND_URL + '/api/me', {
+                const response = await fetch('/api/me', {
                     method: 'GET',
                     credentials: 'include',
                     cache: 'no-store'
@@ -271,9 +274,9 @@
             logoutBtn.disabled = true;
             try {
                 await fetch('/auth/logout', {
-    method: 'POST',
-    credentials: 'include'
-});
+                    method: 'POST',
+                    credentials: 'include'
+                });
             } catch (error) {
                 console.error('Logout failed:', error);
             } finally {
@@ -283,8 +286,6 @@
             }
         });
 
-        // หลัง OAuth callback Backend จะ redirect กลับมาพร้อม ?login=success
-        // ไม่เก็บ token ใน localStorage และไม่อ่าน token จาก URL
         const params = new URLSearchParams(window.location.search);
         if (params.get('login') === 'success') {
             window.history.replaceState({}, document.title, window.location.pathname);
