@@ -110,14 +110,23 @@ function registerOAuthRoutes(app) {
 
             const oauthData = await tokenResponse.json();
 
-            if (oauthData.error || !oauthData.access_token) {
-                console.error('Discord OAuth token error:', oauthData);
-                return res.status(400).send(
-                    `เกิดข้อผิดพลาดจาก Discord: ${
-                        oauthData.error_description || oauthData.error
-                    }`
-                );
-            }
+if (!tokenResponse.ok || !oauthData.access_token) {
+    console.error('Discord OAuth token error:', {
+        status: tokenResponse.status,
+        statusText: tokenResponse.statusText,
+        response: oauthData
+    });
+
+    const errorMessage =
+        oauthData.error_description ||
+        oauthData.error ||
+        oauthData.message ||
+        `Discord ไม่ได้ส่ง access_token กลับมา (HTTP ${tokenResponse.status})`;
+
+    return res.status(400).send(
+        `เกิดข้อผิดพลาดจาก Discord: ${errorMessage}`
+    );
+}
 
             const userResponse = await fetch(
                 'https://discord.com/api/users/@me',
